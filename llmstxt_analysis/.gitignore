@@ -1,0 +1,5 @@
+# Cache directory
+cache/
+
+# Analysis results
+llmstxt_analysis_results.json
