@@ -72,10 +72,10 @@ def sign(live_url, verified_list: list[str]):
 
     # Generate signature
     data = json.dumps(payload).encode()
-    sig = priv.sign(data, padding.PKCS1v15(), hashes.SHA256()).decode()
+    sig = priv.sign(data, padding.PKCS1v15(), hashes.SHA256())
 
     click.echo("✅ Verification passed — trust link issued.")
-    result = {"payload": payload, "signature": sig}
+    # result = {"payload": payload, "signature": sig}
     
     # Return certificate and private key as PEM strings
     cert_pem = cert.public_bytes(serialization.Encoding.PEM).decode()

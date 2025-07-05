@@ -34,9 +34,9 @@ def create_llms_txt(domain: str, summary: str, internal_links: dict[str, dict[st
         # Add external links if they exist
         if url in external_links:
             external_link = external_links[url]
-            llmstxt += f"**External Link:** [{external_link}]({external_link})\n"
+            llmstxt += f"**External Link:** [{external_link}]({external_link}) ({certificates[url]})\n"
 
         # Add horizontal rule to separate entries
-        llmstxt += "---\n"
+        llmstxt += "\n\n"
 
     return llmstxt

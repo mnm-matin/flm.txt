@@ -4,6 +4,9 @@ import requests
 import numpy as np
 from collections import defaultdict
 from certificate import sign
+import json
+import click
+
 # --------------------
 # Utility Functions
 # --------------------
