@@ -7,3 +7,4 @@ aiohttp>=3.9
 async-timeout>=4.0
 openai>=1.14
 tiktoken
+python-dotenv
