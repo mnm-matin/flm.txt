@@ -127,8 +127,7 @@ def get_summaries(domain: str, max_scapes: int = 5) -> dict[str, str]:
 
 
 # just for testing
-def create_llm_txt(domain: str) -> str:
-    summaries = get_summaries(domain)
+def create_summary(summaries: dict[str, dict[str, str]]) -> str:
     summaries_combined = ""
     for url, summary in summaries.items():
         summaries_combined += f"title: {summary['title']}\n"
@@ -145,7 +144,7 @@ def create_llm_txt(domain: str) -> str:
     response = client.chat.completions.create(
         model="gpt-4o-mini",
         messages=[
-            {"role": "system", "content": f"You create a llms.txt file for the domain {domain}. The file should summarize what the domain is about, and give links to the most important internal pages (with very minimal summaries). Only include links that are mentioned in the summaries. You output the llms.txt file as a string in markdown format."},
+            {"role": "system", "content": "You create a summary of the domain based on the summaries of the internal pages. You output the summary as a string."},
             {"role": "user", "content": summaries_combined}
         ]
     )
@@ -155,5 +154,6 @@ def create_llm_txt(domain: str) -> str:
 
 # just for testing
 if __name__ == "__main__":
-    result = create_llm_txt("peec.ai")
+    summaries = get_summaries("peec.ai")
+    result = create_summary(summaries)
     print(result)
