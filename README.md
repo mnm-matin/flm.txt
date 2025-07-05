@@ -42,7 +42,7 @@ A Forward-Link Manifest (FLM) extends traditional `llms.txt` functionality, enab
 
 ## 📖 Documentation
 
-For detailed documentation and examples, visit: [https://github.com/mnm-matin/flm.txt](https://github.com/mnm-matin/flm.txt)
+For detailed documentation and examples, visit: [https://mnm-matin.github.io/flm.txt/](https://mnm-matin.github.io/flm.txt/)
 
 ## 💡 Example Usage
 
