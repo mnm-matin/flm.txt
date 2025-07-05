@@ -33,7 +33,7 @@ def summarize(text: str) -> dict:
 
 
 
-def get_summaries(domain: str, max_scapes: int = 20) -> dict[str, str]:
+def get_summaries(domain: str, max_scapes: int = 3) -> dict[str, str]:
     """
     Scape the domain and return the llms.txt file
     """

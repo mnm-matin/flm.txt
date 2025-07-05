@@ -2,6 +2,7 @@ from link_harvesting.link_harvester import (
     seed_urls_via_openai,
     fetch, extract_text, verify, summarise, base_domain
 )
+from collections import defaultdict
 
 # ─── hard limits you can tweak once and forget ─────────────
 _OPENAI_LIMIT = 20      # how many URLs to ask the search model for
@@ -23,14 +24,14 @@ def get_external_links(domain: str, brand: str) -> dict[str, list[str]]:
         (one entry per accepted page, up to _MAX_ROWS)
     """
     seed_url = f"https://{domain.strip('/')}"
-    mapping  = {}
+    mapping  = defaultdict(list)
     count    = 0
 
     for ext in seed_urls_via_openai(brand, limit=_OPENAI_LIMIT):
         html = fetch(ext)
         txt  = extract_text(html)
         if txt and verify(txt, brand):
-            mapping[seed_url] = [ext]
+            mapping[seed_url].append(ext)
             count += 1
             if count >= _MAX_ROWS:
                 break   # hard stop

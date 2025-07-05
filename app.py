@@ -29,7 +29,7 @@ def index():
 def api_llmstxt():
     domain = request.args.get('domain')
     internal_links = internal_scaping.get_summaries(domain)
-    external_links = external_scaping.get_external_links(domain, domain.split('.')[0].rstrip('https://'))
+    external_links = external_scaping.get_external_links(domain, domain.replace('.', ' ').rstrip('https://'))
     certificates = verify.get_certificates(external_links)
     summary = internal_scaping.create_summary(internal_links)
     llmstxt = llms_txt_generation.create_llms_txt(domain, summary, internal_links, external_links, certificates)
