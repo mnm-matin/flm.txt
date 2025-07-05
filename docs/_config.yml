@@ -1,0 +1,26 @@
+# GitHub Pages configuration for FLM documentation
+title: Forward-Link Manifest (FLM) Technical Specification
+description: Technical specification for Forward-Link Manifest (FLM) - an extension to robots.txt that enables explicit recommendation of trusted external URLs for LLM-powered crawlers.
+theme: minima
+plugins:
+  - jekyll-feed
+  - jekyll-sitemap
+  - jekyll-seo-tag
+
+# SEO and metadata
+author: FLM Working Group
+lang: en-US
+timezone: UTC
+
+# GitHub Pages settings
+github:
+  repository_name: flm-specification
+  repository_url: https://github.com/USERNAME/flm-specification
+
+# Navigation
+header_pages:
+  - index.html
+
+# Exclude files from processing
+exclude:
+  - README.md
