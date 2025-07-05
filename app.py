@@ -22,8 +22,13 @@ app = Flask(__name__)
 
 @app.route('/')
 def index():
-    """Serve the index.html file"""
+    """Serve the main page"""
     return render_template('index.html')
+
+@app.route('/explainer')
+def explainer():
+    """Serve the FLM explainer page"""
+    return render_template('explainer.html')
 
 @app.route('/api/flm')
 def flm():
