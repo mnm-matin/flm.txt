@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>LLMs.txt Generator</title>
+    <title>Forward-Link Manifest (FLM) Generator</title>
     <style>
         * {
             box-sizing: border-box;
@@ -259,8 +259,8 @@
 <body>
     <div class="container">
         <div class="header">
-            <h1>LLMs.txt Generator</h1>
-            <p>Generate comprehensive LLMs.txt files for any domain by analyzing website content and structure</p>
+            <h1>Forward-Link Manifest Generator</h1>
+            <p>Create a manifest file that provides LLM-powered crawlers with pre-approved, trusted external links that you vouch for</p>
         </div>
 
         <form id="generateForm">
@@ -277,27 +277,27 @@
             </div>
 
             <button type="submit" class="generate-btn" id="generateBtn">
-                Generate LLMs.txt
+                Generate Forward-Link Manifest
             </button>
         </form>
 
         <div class="example">
-            <div class="example-title">Example domains to try:</div>
+            <div class="example-title">What is a Forward-Link Manifest?</div>
             <div class="example-domains">
-                <code>github.com</code>, <code>stackoverflow.com</code>, <code>python.org</code>, <code>flask.palletsprojects.com</code>
+                An extended robots-style manifest that tells LLM crawlers which external URLs you trust and recommend as high-confidence citations.
             </div>
         </div>
 
         <div class="loading" id="loading">
             <div class="loading-spinner"></div>
-            <div class="loading-text">Analyzing domain and generating LLMs.txt...</div>
+            <div class="loading-text">Analyzing domain and generating Forward-Link Manifest...</div>
         </div>
 
         <div class="error" id="error"></div>
 
         <div class="result" id="result">
             <div class="result-header">
-                <h3>Generated LLMs.txt</h3>
+                <h3>Generated flm.txt</h3>
                 <button class="copy-btn" id="copyBtn">Copy to Clipboard</button>
             </div>
             <div class="result-content" id="resultContent"></div>
@@ -333,7 +333,7 @@
             loading.style.display = 'block';
             
             try {
-                const response = await fetch(`/api/llmstxt?domain=${encodeURIComponent(domain)}`);
+                const response = await fetch(`/api/flm?domain=${encodeURIComponent(domain)}`);
                 
                 if (!response.ok) {
                     throw new Error(`HTTP error! status: ${response.status}`);
@@ -351,11 +351,11 @@
                 
             } catch (err) {
                 console.error('Error:', err);
-                showError('Failed to generate LLMs.txt. Please check the domain and try again.');
+                showError('Failed to generate Forward-Link Manifest. Please check the domain and try again.');
             } finally {
                 // Reset button state
                 generateBtn.disabled = false;
-                generateBtn.textContent = 'Generate LLMs.txt';
+                generateBtn.textContent = 'Generate Forward-Link Manifest';
                 loading.style.display = 'none';
             }
         });
