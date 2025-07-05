@@ -49,7 +49,7 @@ def get_certificates(external_links: dict[str, list[str]]) -> dict[str, str]:
 
         verified_result = json.loads(verified_result)
         if verified_result["status"] == "success":
-            certificate = sign(internal_link, external_link)
+            certificate, _ = sign(internal_link, external_link)
             if certificate:
                 certificates[internal_link].append(certificate)
         else:
