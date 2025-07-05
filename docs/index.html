@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Forward-Link Manifest (FLM) - Technical Specification</title>
-    <meta name="description" content="Technical specification for Forward-Link Manifest (FLM) - an extension to robots.txt that enables explicit recommendation of trusted external URLs for LLM-powered crawlers.">
+    <meta name="description" content="Technical specification for Forward-Link Manifest (FLM) - an extension to llms.txt that enables explicit recommendation of trusted external URLs for LLM-powered crawlers.">
     <style>
         * {
             box-sizing: border-box;
@@ -237,7 +237,7 @@
     <header class="header">
         <div class="container">
             <h1>Forward-Link Manifest (FLM)</h1>
-            <p class="subtitle">Technical Specification for an Extended Robots-Style Manifest</p>
+            <p class="subtitle">Technical Specification for an Extended llms.txt Manifest</p>
         </div>
     </header>
 
@@ -261,10 +261,10 @@
             <!-- Introduction -->
             <section class="section" id="introduction">
                 <h2>Introduction</h2>
-                <p>A <strong>Forward-Link Manifest (FLM)</strong> is an extension to the traditional <code>robots.txt</code> file that explicitly lists external URLs that a website owner endorses as trustworthy and authoritative for LLM-powered crawlers.</p>
+                <p>A <strong>Forward-Link Manifest (FLM)</strong> is an extension to the <code>llms.txt</code> file that explicitly lists external URLs that a website owner endorses as trustworthy and authoritative for LLM-powered crawlers.</p>
                 
                 <div class="alert alert-info">
-                    <strong>Core Concept:</strong> "Think of an extended robots-style manifest that not only tells an LLM-powered crawler where it may (or may not) go, but also hands it a pre-approved set of outbound URLs—'forward links'—that the site owner vouches for."
+                    <strong>Core Concept:</strong> "Think of an extended llms.txt manifest that not only tells an LLM-powered crawler where it may (or may not) go, but also hands it a pre-approved set of outbound URLs—'forward links'—that the site owner vouches for."
                 </div>
 
                 <h3>Purpose and Benefits</h3>
@@ -272,7 +272,7 @@
                 <ul>
                     <li><strong>Authority & Provenance</strong>: Large-language-model search agents have difficulty deciding which external sources are trustworthy. If the site author enumerates "forward links," the agent can treat them as higher-confidence citations.</li>
                     <li><strong>Improved Attribution</strong>: The crawler can quote or paraphrase from whitelisted pages knowing the site owner explicitly endorsed them, reducing the likelihood of LLM-generated hallucinations.</li>
-                    <li><strong>Fine-Grained Crawl Control</strong>: While <code>robots.txt</code> only says "do/don't crawl X," an FLM also says "these Y URLs are recommended next hops; treat them as canonical or related."</li>
+                    <li><strong>Fine-Grained Crawl Control</strong>: While <code>llms.txt</code> provides basic guidance for LLM crawlers, an FLM also says "these Y URLs are recommended next hops; treat them as canonical or related."</li>
                     <li><strong>Efficient Crawling</strong>: A single machine-readable file is lighter to fetch than crawling every page just to extract anchors.</li>
                 </ul>
             </section>
@@ -280,7 +280,7 @@
             <!-- File Structure -->
             <section class="section" id="structure">
                 <h2>FLM File Structure</h2>
-                <p>The FLM file (typically named <code>flm.txt</code>) follows a similar structure to <code>robots.txt</code> with additional directives for forward links:</p>
+                <p>The FLM file (typically named <code>flm.txt</code>) follows a similar structure to <code>llms.txt</code> with additional directives for forward links:</p>
 
                 <div class="code-block">
                     <pre><code><span class="comment"># "flm.txt" (or any name you choose; user-agent string makes it discoverable)</span>
@@ -303,10 +303,9 @@
                 <p>The FLM can be referenced in multiple ways:</p>
                 <ul>
                     <li>As a standalone file at a well-known URI (e.g., <code>/flm.txt</code>)</li>
-                    <li>Referenced from <code>robots.txt</code> with a directive like:
+                    <li>Referenced from <code>llms.txt</code> with a directive like:
                         <div class="code-block">
-                            <pre><code><span class="directive">User-agent:</span> llm-search-bot
-<span class="directive">Forward-manifest:</span> /flm.txt</code></pre>
+                            <pre><code><span class="directive">Forward-manifest:</span> /flm.txt</code></pre>
                         </div>
                     </li>
                     <li>Via HTTP headers</li>
@@ -351,15 +350,8 @@
                     <pre><code><span class="directive">Expire:</span> 2024-12-31</code></pre>
                 </div>
 
-                <h3>Standard Robots Directives</h3>
-                <p>All standard <code>robots.txt</code> directives remain valid:</p>
-                <ul>
-                    <li><code>User-agent</code></li>
-                    <li><code>Allow</code></li>
-                    <li><code>Disallow</code></li>
-                    <li><code>Crawl-delay</code></li>
-                    <li><code>Sitemap</code></li>
-                </ul>
+                <h3>Standard llms.txt Directives</h3>
+                <p>All standard <code>llms.txt</code> directives remain valid and can be included in the FLM file for completeness.</p>
             </section>
 
             <!-- Crawler Behavior -->
@@ -369,7 +361,7 @@
 
                 <ol>
                     <li><strong>Fetch FLM File</strong>: Retrieves the <code>flm.txt</code> file first.</li>
-                    <li><strong>Parse Robots Rules</strong>: Respects standard <code>robots.txt</code> directives to determine crawl constraints.</li>
+                    <li><strong>Parse llms.txt Rules</strong>: Respects standard <code>llms.txt</code> directives to understand the site's preferences for LLM crawlers.</li>
                     <li><strong>Process Forward Directives</strong>: Reads the <code>Forward</code> directives, recognizing these URLs as explicitly endorsed by the site owner.</li>
                     <li><strong>Trust via Certificates</strong>: Due to the cryptographic certificates provided (<code>Digest-SHA256</code>), the crawler does not need to visit these URLs to verify their trustworthiness. The certificates already confirm the integrity and authenticity of the linked resources.</li>
                     <li><strong>Citation Preference</strong>: When responding to user queries, the crawler prioritizes citing these pre-verified, trusted links, enhancing the accuracy and reliability of its responses.</li>
@@ -412,7 +404,7 @@
                     <thead>
                         <tr>
                             <th>Aspect</th>
-                            <th>robots.txt</th>
+                            <th>llms.txt</th>
                             <th>sitemap.xml</th>
                             <th>FLM</th>
                         </tr>
@@ -420,7 +412,7 @@
                     <tbody>
                         <tr>
                             <td>Purpose</td>
-                            <td>Crawl permissions</td>
+                            <td>LLM crawler guidance</td>
                             <td>Internal page discovery</td>
                             <td>External link endorsement</td>
                         </tr>
@@ -446,7 +438,7 @@
                 </table>
 
                 <div class="alert alert-info">
-                    <strong>Important:</strong> FLM is NOT a replacement for <code>robots.txt</code> or <code>sitemap.xml</code>. It complements these existing standards by addressing the specific needs of LLM-powered crawlers.
+                    <strong>Important:</strong> FLM is NOT a replacement for <code>llms.txt</code> or <code>sitemap.xml</code>. It complements these existing standards by addressing the specific needs of LLM-powered crawlers for external link endorsement.
                 </div>
             </section>
 

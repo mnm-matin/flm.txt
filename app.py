@@ -3,7 +3,7 @@
 Minimal Flask app for LLMs.txt generation
 """
 
-from flask import Flask, render_template, jsonify, request
+from flask import Flask, render_template, jsonify, request, send_from_directory
 from openai import OpenAI
 import os
 from pathlib import Path
@@ -28,7 +28,7 @@ def index():
 @app.route('/explainer')
 def explainer():
     """Serve the FLM explainer page"""
-    return render_template('explainer.html')
+    return send_from_directory('docs', 'index.html')
 
 @app.route('/api/flm')
 def flm():
