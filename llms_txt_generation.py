@@ -35,7 +35,7 @@ def create_llms_txt(domain: str, summary: str, internal_links: dict[str, dict[st
         if url in external_links:
             llmstxt += f"**External Links:**\n"
             for x in external_links[url]:
-                llmstxt += f"- [{x.rstrip('https://').split('/')[0]}]({x}) - {certificates[url].get(x, '\nNo certificate').split('\n')[1]}\n"
+                llmstxt += f"- [{x.rstrip('https://').split('/')[0]}]({x}) - {certificates[url][0].split('\n')[1]}\n"
 
         # Add horizontal rule to separate entries
         llmstxt += "\n\n"
