@@ -13,13 +13,8 @@ from bs4 import BeautifulSoup
 import pathlib
 
 # ──────────────────────── 0. load .env manually ──────────────────────
-ENV_PATH = pathlib.Path(".env")
-if ENV_PATH.exists():
-    for line in ENV_PATH.read_text().splitlines():
-        if line.startswith("#") or "=" not in line:
-            continue
-        k, v = line.split("=", 1)
-        os.environ.setdefault(k.strip(), v.strip())
+from dotenv import load_dotenv
+load_dotenv()
 
 # ─────────────────────────── 1. config ───────────────────────────────
 openai.api_key = os.getenv("OPENAI_API_KEY") or "MISSING_KEY"

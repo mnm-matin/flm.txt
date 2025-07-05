@@ -7,14 +7,8 @@ from pathlib import Path
 from openai import OpenAI
 
 
-env_path = Path('.env')
-if env_path.exists():
-    with open(env_path) as f:
-        for line in f:
-            line = line.strip()
-            if line and not line.startswith('#'):
-                key, value = line.split('=', 1)
-                os.environ[key.strip()] = value.strip()
+from dotenv import load_dotenv
+load_dotenv()
 
 client = OpenAI()
 
