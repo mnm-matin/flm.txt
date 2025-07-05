@@ -8,8 +8,10 @@ from cryptography.x509.oid import NameOID, ObjectIdentifier
 from datetime import datetime, timedelta
 from hashlib import sha256
 import json
+import os 
 
 CUSTOM_OID = "1.3.6.1.4.1.99999.1"
+CERTIFICATE_PATH = 'flm.txt/llm_cert.pem'
 
 def sha256_hex(data):
     return hashlib.sha256(data.encode()).hexdigest()
@@ -72,4 +74,44 @@ def sign(live_url, verified_list: list[str], key_out="llm_key.pem", cert_out="ll
     click.echo(json.dumps(result))
 
 
+
+def verify_cert(cert_path=CERTIFICATE_PATH):
+    """
+    Verify if the certificate contains the LLM verification extension
+    
+    Args:
+        cert_path: Path to the certificate file (relative to project root)
+    """
+    try:
+        # Get the absolute path to the certificate
+        project_root = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+        cert_path = os.path.join(project_root, cert_path)
+        
+        # Read certificate from file
+        click.echo(f"Reading certificate from {cert_path}...")
+        with open(cert_path, 'rb') as f:
+            cert_data = f.read()
+
+        cert = x509.load_pem_x509_certificate(cert_data)
+        
+        # Check for LLM verification extension
+        try:
+            ext = cert.extensions.get_extension_for_oid(ObjectIdentifier(CUSTOM_OID))
+            if isinstance(ext.value, x509.UnrecognizedExtension):
+                click.echo(f"✅ Certificate contains LLM verification extension with value: {ext.value.value.decode()}")
+            else:
+                click.echo("❌ Certificate has LLM verification extension but value format is invalid", err=True)
+                sys.exit(1)
+        except x509.ExtensionNotFound:
+            click.echo("❌ Certificate does not contain LLM verification extension", err=True)
+            sys.exit(1)
+            
+    except Exception as e:
+        click.echo(f"❌ Error verifying certificate: {str(e)}", err=True)
+        sys.exit(1)
+
+    click.echo("✅ Certificate verification completed")
+
+
 sign("https://www.purdueglobal.edu", ["https://www.purdueglobal.edu/blog/b", "https://www.purdueglobal.edu/blog/a"])
+verify_cert()  # Uses the default CERTIFICATE_PATH

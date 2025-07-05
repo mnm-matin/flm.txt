@@ -2,6 +2,7 @@ from typing import List
 from sentence_transformers import SentenceTransformer
 import requests
 import numpy as np
+from collections import defaultdict
 # --------------------
 # Utility Functions
 # --------------------
@@ -31,24 +32,22 @@ def similarity(a, b):
     similarity_score = np.dot(embedding_a, embedding_b) / (np.linalg.norm(embedding_a) * np.linalg.norm(embedding_b))
     return similarity_score
 
-def parse_forward_links(file_path: str) -> List[str]:
+def get_certificates(external_links: dict[str, str]) -> dict[str, str]:
     """
-    Parses an llm.txt file and returns a list of forward links.
+    Get the certificates for the external links
 
     Args:
-        file_path (str): Path to the llm.txt file.
+        external_links (dict[str, str]): A dictionary of external links, where the key is the internal link and the value is the external link
 
     Returns:
-        List[str]: List of forward links extracted from the file.
+        dict[str, str]: A dictionary of certificates, where the key is the internal link and the value is the certificate
     """
-    forward_links = []
-    with open(file_path, 'r') as file:
-        for line in file:
-            line = line.strip()
-            if line.startswith("Forward:"):
-                link = line.split("Forward:", 1)[1].strip()
-                forward_links.append(link)
-    return forward_links
+    certificates = defaultdict(list)
+    for internal_link, external_link in external_links.items():
+        certificate = verify_forward_link(internal_link, external_link)
+        if certificate:
+            certificates[internal_link].append(certificate)
+    return certificates
 
 def verify_forward_link(source_url: str, forward_link: list[str]) -> bool:
     """
@@ -85,8 +84,9 @@ def verify_forward_link(source_url: str, forward_link: list[str]) -> bool:
             return False
     return True
 
-result = verify_forward_link(source_url='https://www.purdueglobal.edu/blog/student-life/valuable-health-wellness-blogs/', forward_link=['https://www.acefitness.org/resources/pros/expert-articles/'])
-print(result)
+if __name__ == "__main__":
+    result = verify_forward_link(source_url='https://www.purdueglobal.edu/blog/student-life/valuable-health-wellness-blogs/', forward_link=['https://www.acefitness.org/resources/pros/expert-articles/'])
+    print(result)
 
-result2 = verify_forward_link(source_url='https://www.purdueglobal.edu/blog/student-life/valuable-health-wellness-blogs/', forward_link=['https://public.com/?wpsrc=Organic+Search&wpsn=www.google.com'])
-print(result2)
+    result2 = verify_forward_link(source_url='https://www.purdueglobal.edu/blog/student-life/valuable-health-wellness-blogs/', forward_link=['https://public.com/?wpsrc=Organic+Search&wpsn=www.google.com'])
+    print(result2)
