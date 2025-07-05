@@ -25,8 +25,8 @@ def index():
     """Serve the index.html file"""
     return render_template('index.html')
 
-@app.route('/api/llmstxt')
-def api_llmstxt():
+@app.route('/api/flm')
+def flm():
     domain = request.args.get('domain')
     internal_links = internal_scaping.get_summaries(domain)
     external_links = external_scaping.get_external_links(domain, domain.replace('.', ' ').rstrip('https://'))
