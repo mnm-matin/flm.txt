@@ -196,11 +196,11 @@ def main(seed_url: str, brand: str):
           conn.execute("SELECT COUNT(*) FROM links").fetchone()[0])
 
 # ─────────────── Ctrl-C graceful handler ────────────────
-def _sig_handler(sig, frame):
-    global interrupted
-    interrupted = True
-    print("\nCTRL-C detected — finishing current task then exiting…")
-signal.signal(signal.SIGINT, _sig_handler)
+# def _sig_handler(sig, frame):
+#     global interrupted
+#     interrupted = True
+#     print("\nCTRL-C detected — finishing current task then exiting…")
+# signal.signal(signal.SIGINT, _sig_handler)
 
 # ─────────────────────────  entry  ───────────────────────
 if __name__ == "__main__":
