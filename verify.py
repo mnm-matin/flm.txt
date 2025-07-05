@@ -67,8 +67,6 @@ def verify_forward_link(source_url: str, forward_link: list[str]) -> bool:
     Raises:
         NotImplementedError: This function is a stub and needs implementation.
     """
-    # raise NotImplementedError("This function needs to be implemented.")
-
     llm_response = requests.get(source_url, timeout=10)
     llm_response.raise_for_status()
     llm_text = normalize(llm_response.text)
@@ -81,8 +79,9 @@ def verify_forward_link(source_url: str, forward_link: list[str]) -> bool:
         score = similarity(llm_text, forward_link_text)
         print(f"Score: {score}, link: {link}")
         if score < 0.1:
-            return False
-    return True
+            return f"""{"status": "fail", "message": "Forward link not verified, because score is lower than {score}"}"""
+
+    return """{"status": "success", "message": "Forward link verified"}"""
 
 if __name__ == "__main__":
     result = verify_forward_link(source_url='https://www.purdueglobal.edu/blog/student-life/valuable-health-wellness-blogs/', forward_link=['https://www.acefitness.org/resources/pros/expert-articles/'])

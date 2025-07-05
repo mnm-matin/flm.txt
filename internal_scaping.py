@@ -39,7 +39,7 @@ def summarize(text: str) -> dict:
 
 
 
-def get_summaries(domain: str) -> dict[str, str]:
+def get_summaries(domain: str, max_scapes: int = 5) -> dict[str, str]:
     """
     Scape the domain and return the llms.txt file
     """
@@ -91,48 +91,48 @@ def get_summaries(domain: str) -> dict[str, str]:
     except requests.exceptions.RequestException as e:
         print(f"LLMs.txt not available")
 
-    try:
-        while internal_links:
-            url = internal_links.pop()
-            print(f"[{len(summaries)+1}/{len(internal_links)+len(summaries)+1}] Scaping {url}")
-            try:
-                response = requests.get(url)
-                if response.status_code == 200:
-                    # Parse HTML and extract meaningful content
-                    soup = BeautifulSoup(response.text, "html.parser")
-                    for script in soup(["script", "style"]):
-                        script.decompose()
-                    site_content = soup.get_text()
-                    site_content = " ".join(site_content.split())
+    while internal_links:
+        if len(summaries) >= max_scapes:
+            break
+        url = internal_links.pop()
+        print(f"[{len(summaries)+1}/{len(internal_links)+len(summaries)+1}] Scaping {url}")
+        try:
+            response = requests.get(url)
+            if response.status_code == 200:
+                # Parse HTML and extract meaningful content
+                soup = BeautifulSoup(response.text, "html.parser")
+                for script in soup(["script", "style"]):
+                    script.decompose()
+                site_content = soup.get_text()
+                site_content = " ".join(site_content.split())
 
-                    summaries[url] = summarize(site_content)
-                    new_links_raw = soup.find_all("a")
-                    new_links = set()
-                    for link in new_links_raw:
-                        href = link.get("href").strip()
-                        href = href.split('#')[0]  # remove anchor
-                        if not href:
-                            continue
-                        elif href.startswith(domain) or href.startswith(f"{domain}/"):
-                            pass
-                        elif href.startswith('/'):
-                            href = f"{domain}{href}"
-                        elif href.startswith('./'):
-                            href = f"{domain}{href[1:]}"
-                        else:
-                            continue
-                        new_links.add(href)
-                    internal_links.update(new_links - summaries.keys())
+                summaries[url] = summarize(site_content)
+                new_links_raw = soup.find_all("a")
+                new_links = set()
+                for link in new_links_raw:
+                    href = link.get("href").strip()
+                    href = href.split('#')[0]  # remove anchor
+                    if not href:
+                        continue
+                    elif href.startswith(domain) or href.startswith(f"{domain}/"):
+                        pass
+                    elif href.startswith('/'):
+                        href = f"{domain}{href}"
+                    elif href.startswith('./'):
+                        href = f"{domain}{href[1:]}"
+                    else:
+                        continue
+                    new_links.add(href)
+                internal_links.update(new_links - summaries.keys())
 
-            except requests.exceptions.RequestException as e:
-                print(f"Failed: {e}")
-                continue
-    except KeyboardInterrupt:
-        print("Keyboard interrupt")
+        except requests.exceptions.RequestException as e:
+            print(f"Failed: {e}")
+            continue
 
     return summaries
 
 
+# just for testing
 def create_llm_txt(domain: str) -> str:
     summaries = get_summaries(domain)
     summaries_combined = ""
@@ -159,6 +159,7 @@ def create_llm_txt(domain: str) -> str:
     return response.choices[0].message.content
 
 
+# just for testing
 if __name__ == "__main__":
     result = create_llm_txt("peec.ai")
     print(result)

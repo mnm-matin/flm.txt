@@ -5,6 +5,7 @@ def create_llms_txt(domain: str, internal_links: dict[str, dict[str, str]], exte
     Create a llms.txt file for the domain
     """
     llmstxt = ""
+    # TODO: summary
     for url, summary in internal_links.items():
         llmstxt += f"title: {summary['title']}\n"
         llmstxt += f"url: {url}\n"
