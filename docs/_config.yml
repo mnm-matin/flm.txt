@@ -14,8 +14,8 @@ timezone: UTC
 
 # GitHub Pages settings
 github:
-  repository_name: flm-specification
-  repository_url: https://github.com/USERNAME/flm-specification
+  repository_name: flm.txt
+  repository_url: https://github.com/mnm-matin/flm.txt
 
 # Navigation
 header_pages:
