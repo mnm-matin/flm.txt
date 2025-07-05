@@ -58,6 +58,30 @@
             line-height: 1.6;
         }
 
+        .explainer-link {
+            display: inline-block;
+            margin-top: 20px;
+            padding: 12px 24px;
+            background: linear-gradient(45deg, #27ae60, #2ecc71);
+            color: white;
+            text-decoration: none;
+            border-radius: 25px;
+            font-size: 1em;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 15px rgba(39, 174, 96, 0.3);
+        }
+
+        .explainer-link:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(39, 174, 96, 0.4);
+            background: linear-gradient(45deg, #2ecc71, #27ae60);
+        }
+
+        .explainer-link:active {
+            transform: translateY(0);
+        }
+
         .form-group {
             margin-bottom: 30px;
         }
@@ -261,6 +285,7 @@
         <div class="header">
             <h1>Forward-Link Manifest Generator</h1>
             <p>Create a manifest file that provides LLM-powered crawlers with pre-approved, trusted external links that you vouch for</p>
+            <a href="/explainer" class="explainer-link">📖 Learn More About FLM</a>
         </div>
 
         <form id="generateForm">
