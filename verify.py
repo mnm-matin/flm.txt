@@ -3,6 +3,7 @@ from sentence_transformers import SentenceTransformer
 import requests
 import numpy as np
 from collections import defaultdict
+from certificate import sign
 # --------------------
 # Utility Functions
 # --------------------
@@ -32,7 +33,7 @@ def similarity(a, b):
     similarity_score = np.dot(embedding_a, embedding_b) / (np.linalg.norm(embedding_a) * np.linalg.norm(embedding_b))
     return similarity_score
 
-def get_certificates(external_links: dict[str, str]) -> dict[str, str]:
+def get_certificates(external_links: dict[str, list[str]]) -> dict[str, str]:
     """
     Get the certificates for the external links
 
@@ -44,12 +45,18 @@ def get_certificates(external_links: dict[str, str]) -> dict[str, str]:
     """
     certificates = defaultdict(list)
     for internal_link, external_link in external_links.items():
-        certificate = verify_forward_link(internal_link, external_link)
-        if certificate:
-            certificates[internal_link].append(certificate)
+        verified_result = verify_forward_link(internal_link, external_link)
+
+        verified_result = json.loads(verified_result)
+        if verified_result["status"] == "success":
+            certificate = sign(internal_link, external_link)
+            if certificate:
+                certificates[internal_link].append(certificate)
+        else:
+            click.echo(f"❌ Forward link not verified for {internal_link}")
     return certificates
 
-def verify_forward_link(source_url: str, forward_link: list[str]) -> bool:
+def verify_forward_link(source_url: str, forward_link: list[str]):
     """
     Verifies if a forward link is correctly mentioned for the source URL
 
