@@ -7,8 +7,9 @@ from flask import Flask, render_template, jsonify, request
 from openai import OpenAI
 import os
 from pathlib import Path
-
-
+import internal_scaping
+import external_scaping
+import llms_txt_generation
 
 env_path = Path('.env')
 if env_path.exists():
@@ -32,21 +33,12 @@ def index():
 @app.route('/api/llmstxt')
 def api_llmstxt():
     domain = request.args.get('domain')
-    completion = client.chat.completions.create(
-        model="gpt-4o-search-preview",
-        web_search_options={
-            "search_context_size": "low",
-        },
-        messages=[{
-                "role": "system",
-                "content": "You search the given domain and return a summary of all websites on it and a list of the most relevant internal links. The goal is to create a llms.txt file that contains all information about the domain. Only use internal links, not external links."
-            }, {
-                "role": "user",
-                "content": domain,
-        }],
-    )
+    internal_links = internal_scaping.get_summaries(domain)
+    external_links = external_scaping.get_external_links(domain)
+    certificates = get_certificates(external_links)
+    llmstxt = llms_txt_generation.create_llms_txt(domain, internal_links, external_links, certificates)
 
-    return jsonify(completion.choices[0].message.content)
+    return jsonify(llmstxt)
 
 
 
