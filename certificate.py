@@ -125,6 +125,6 @@ def verify_cert(cert_path=CERTIFICATE_PATH):
 
     click.echo("✅ Certificate verification completed")
 
-
-cert_pem, key_pem = sign("https://www.purdueglobal.edu", ["https://www.purdueglobal.edu/blog/b", "https://www.purdueglobal.edu/blog/a"])
-verify_cert()  # Uses the default CERTIFICATE_PATH
+if __name__ == "__main__":
+    cert_pem, key_pem = sign("https://www.purdueglobal.edu", ["https://www.purdueglobal.edu/blog/b", "https://www.purdueglobal.edu/blog/a"])
+    verify_cert()  # Uses the default CERTIFICATE_PATH
