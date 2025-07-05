@@ -31,11 +31,12 @@ def api_llmstxt():
     internal_links = internal_scaping.get_summaries(domain)
     external_links = external_scaping.get_external_links(domain)
     certificates = verify.get_certificates(external_links)
-    llmstxt = llms_txt_generation.create_llms_txt(domain, internal_links, external_links, certificates)
+    summary = internal_scaping.create_summary(internal_links)
+    llmstxt = llms_txt_generation.create_llms_txt(domain, summary, internal_links, external_links, certificates)
 
     return jsonify(llmstxt)
 
 
 
 if __name__ == '__main__':
-    app.run(debug=True, host='0.0.0.0', port=5000)
+    app.run(debug=True, host='0.0.0.0', port=5055)

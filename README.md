@@ -25,3 +25,26 @@ Digest-SHA256: https://example.org/whitepaper.pdf 517f2e...
 
 - Complements `robots.txt` (does not replace it).
 - Different from `sitemap.xml` (lists external, trusted resources rather than internal pages).
+
+## Installation and Setup
+
+Follow these steps to set up the project environment:
+
+### 1. Create a virtual environment using `uv`
+
+```bash
+uv venv
+source .venv/bin/activate
+```
+
+### 2. Install dependencies from `requirements.txt`
+
+```bash
+uv pip install -r requirements.txt
+```
+
+### 3. Install Playwright browsers
+
+```bash
+playwright install
+```

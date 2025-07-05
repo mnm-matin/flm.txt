@@ -1,21 +1,42 @@
 
 
-def create_llms_txt(domain: str, internal_links: dict[str, dict[str, str]], external_links: dict[str, str], certificates: dict[str, str]) -> str:
+def create_llms_txt(domain: str, summary: str, internal_links: dict[str, dict[str, str]], external_links: dict[str, str], certificates: dict[str, str]) -> str:
     """
     Create a llms.txt file for the domain
+
+    Args:
+        domain (str): The domain to create the llms.txt file for
+        summary (str): The summary of the domain
+        internal_links (dict[str, dict[str, str]]): A dictionary of internal links, where the key is the URL and the value is a dictionary with the title and summary
+        external_links (dict[str, str]): A dictionary of external links, where the key is the internal link and the value is the external link
+        certificates (dict[str, str]): A dictionary of certificates, where the key is the internal link and the value is the certificate
+
+    Returns:
+        str: The llms.txt file as a string
     """
-    llmstxt = ""
-    # TODO: summary
+    llmstxt = f"# {domain}"
+
+    # summary
+    llmstxt += f"\n{summary}\n"
+
+    # pages overview
+    llmstxt += "\n## Pages Overview\n"
     for url, summary in internal_links.items():
-        llmstxt += f"title: {summary['title']}\n"
-        llmstxt += f"url: {url}\n"
-        # llmstxt += f"important: {summary['important']}\n"
-        llmstxt += f"summary: {summary['summary']}\n"
+        # Use markdown header for the title
+        llmstxt += f"### {summary['title']}\n"
+
+        # Use proper markdown link format
+        llmstxt += f"**URL:** [{url}]({url})\n"
+
+        # Format summary with proper markdown
+        llmstxt += f"**Summary:**\n{summary['summary']}\n"
+
+        # Add external links if they exist
         if url in external_links:
             external_link = external_links[url]
-            llmstxt += f"external_link: {external_link}\n"
-            if external_link in certificates:
-                certificate = certificates[external_link]
-                llmstxt += f"certificate: {certificate}\n"
-        llmstxt += "\n\n"
+            llmstxt += f"**External Link:** [{external_link}]({external_link})\n"
+
+        # Add horizontal rule to separate entries
+        llmstxt += "---\n"
+
     return llmstxt
